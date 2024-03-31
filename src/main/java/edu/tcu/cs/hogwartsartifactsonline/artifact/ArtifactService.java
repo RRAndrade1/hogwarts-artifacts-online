@@ -1,10 +1,7 @@
 package edu.tcu.cs.hogwartsartifactsonline.artifact;
 
-import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.ArtifactDto;
 import edu.tcu.cs.hogwartsartifactsonline.artifact.utils.IdWorker;
-import jakarta.persistence.Id;
 import jakarta.transaction.Transactional;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +10,10 @@ import java.util.List;
 @Transactional
 public class ArtifactService {
 
-    private final ArtifcactRepository artifcactRepository;
+    private final ArtifactRepository artifactRepository;
 
-    public ArtifactService(ArtifcactRepository artifcactRepository, IdWorker idWorker) {
-        this.artifcactRepository = artifcactRepository;
+    public ArtifactService(ArtifactRepository artifactRepository, IdWorker idWorker) {
+        this.artifactRepository = artifactRepository;
         this.idWorker = idWorker;
     }
 
@@ -24,29 +21,33 @@ public class ArtifactService {
 
 
     public Artifact findById(String artifactId){
-        return this.artifcactRepository.findById(artifactId)
+        return this.artifactRepository.findById(artifactId)
                 .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
     }
 
     public List<Artifact> findAll(){
-        return this.artifcactRepository.findAll();
+        return this.artifactRepository.findAll();
     }
 
     public Artifact save(Artifact newArtifact){
         newArtifact.setId(idWorker.nextId() + "");
-        return this.artifcactRepository.save(newArtifact);
+        return this.artifactRepository.save(newArtifact);
     }
 
-    public Artifact update(String artifactid, Artifact update){
-        return this.artifcactRepository.findById(artifactid)
+    public Artifact update(String artifactId, Artifact update){
+        return this.artifactRepository.findById(artifactId)
                 .map(oldArtifact -> {
                     oldArtifact.setName(update.getName());
                     oldArtifact.setDescription(update.getDescription());
                     oldArtifact.setImageURL(update.getImageURL());
-                    return this.artifcactRepository.save(oldArtifact);
+                    return this.artifactRepository.save(oldArtifact);
                 })
-                .orElseThrow(() -> new ArtifactNotFoundException(artifactid));
-
+                .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
     }
 
+    public void delete(String artifactId){
+        this.artifactRepository.findById(artifactId)
+                .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
+        this.artifactRepository.deleteById(artifactId);
+    }
 }
