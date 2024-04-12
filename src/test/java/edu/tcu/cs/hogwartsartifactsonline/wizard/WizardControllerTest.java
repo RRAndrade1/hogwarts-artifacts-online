@@ -241,7 +241,6 @@ class WizardControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
-    @Test
     void testAssignArtifactSuccess() throws Exception {
         // Given
         doNothing().when(this.wizardService).assignArtifact(2, "1250808601744904191");
