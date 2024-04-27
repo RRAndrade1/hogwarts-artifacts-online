@@ -3,13 +3,10 @@ package edu.tcu.cs.hogwartsartifactsonline.system;
 import edu.tcu.cs.hogwartsartifactsonline.artifact.Artifact;
 import edu.tcu.cs.hogwartsartifactsonline.artifact.ArtifactRepository;
 import edu.tcu.cs.hogwartsartifactsonline.hogwartsuser.HogwartsUser;
-import edu.tcu.cs.hogwartsartifactsonline.hogwartsuser.UserRepository;
 import edu.tcu.cs.hogwartsartifactsonline.hogwartsuser.UserService;
 import edu.tcu.cs.hogwartsartifactsonline.wizard.Wizard;
 import edu.tcu.cs.hogwartsartifactsonline.wizard.WizardRepository;
-import org.apache.catalina.User;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component

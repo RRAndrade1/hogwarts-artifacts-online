@@ -1,6 +1,7 @@
 package edu.tcu.cs.hogwartsartifactsonline.artifact;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.ArtifactDto;
 import edu.tcu.cs.hogwartsartifactsonline.system.StatusCode;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
@@ -97,12 +98,12 @@ class ArtifactControllerIntegrationTest {
     @DisplayName("Check addArtifact with valid input (POST)")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void testAddArtifactSuccess() throws Exception {
-        Artifact a = new Artifact();
-        a.setName("Remembrall");
-        a.setDescription("A Remembrall was a magical large marble-sized glass ball that contained smoke which turned red when its owner or user had forgotten something. It turned clear once whatever was forgotten was remembered.");
-        a.setImageURL("ImageUrl");
-
-        String json = this.objectMapper.writeValueAsString(a);
+        ArtifactDto artifactDto = new ArtifactDto(null,
+                "Remembrall",
+                "A Remembrall was a magical large marble-sized glass ball that contained smoke which turned red when its owner or user had forgotten something. It turned clear once whatever was forgotten was remembered.",
+                "ImageUrl",
+                null);
+        String json = this.objectMapper.writeValueAsString(artifactDto);
 
         this.mockMvc.perform(post(this.baseUrl + "/artifacts").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token))
                 .andExpect(jsonPath("$.flag").value(true))
@@ -147,13 +148,12 @@ class ArtifactControllerIntegrationTest {
     @Test
     @DisplayName("Check updateArtifact with valid input (PUT)")
     void testUpdateArtifactSuccess() throws Exception {
-        Artifact a = new Artifact();
-        a.setId("1250808601744904192");
-        a.setName("Updated artifact name");
-        a.setDescription("Updated description");
-        a.setImageURL("Updated imageUrl");
-
-        String json = this.objectMapper.writeValueAsString(a);
+        ArtifactDto artifactDto = new ArtifactDto("1250808601744904192",
+                "Updated artifact name",
+                "Updated description",
+                "Updated imageUrl",
+                null);
+        String json = this.objectMapper.writeValueAsString(artifactDto);
 
         this.mockMvc.perform(put(this.baseUrl + "/artifacts/1250808601744904192").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token))
                 .andExpect(jsonPath("$.flag").value(true))
@@ -168,13 +168,12 @@ class ArtifactControllerIntegrationTest {
     @Test
     @DisplayName("Check updateArtifact with non-existent id (PUT)")
     void testUpdateArtifactErrorWithNonExistentId() throws Exception {
-        Artifact a = new Artifact();
-        a.setId("1250808601744904199"); // This id does not exist in the database.
-        a.setName("Updated artifact name");
-        a.setDescription("Updated description");
-        a.setImageURL("Updated imageUrl");
-
-        String json = this.objectMapper.writeValueAsString(a);
+        ArtifactDto artifactDto = new ArtifactDto("1250808601744904192",
+                "Invisibility Cloak",
+                "A new description.",
+                "ImageUrl",
+                null);
+        String json = this.objectMapper.writeValueAsString(artifactDto);
 
         this.mockMvc.perform(put(this.baseUrl + "/artifacts/1250808601744904199").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token))
                 .andExpect(jsonPath("$.flag").value(false))
